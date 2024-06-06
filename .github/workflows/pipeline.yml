@@ -45,7 +45,7 @@ jobs:
         with:
             severity: error
             text: Build failed
-            description: commit ${{ github.event.commits.url }} by ${{ github.event.commits.author.username }} broke the build
+            description: commit ${{ github.event.commits.url }} by ${{ github.actor }} broke the build
             webhookUrl: ${{ secrets.DISCORD_WEBHOOK }} 
 
   tag_release:
@@ -68,11 +68,13 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
       - name: Successful deployment
         uses: rjstone/discord-webhook-notify@v1
         if: success()
         with:
             severity: info
             text: A new version of Pokedex deployed
-            description: to https://full-stack-open-pokedex-clo6.onrender.com by ${{ github.event.commits.author.username }}
+            description: to https://full-stack-open-pokedex-clo6.onrender.com by ${{ github.actor }}
             webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
